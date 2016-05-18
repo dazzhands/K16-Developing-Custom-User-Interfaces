@@ -9,6 +9,40 @@
         <http_method>GET</http_method>
         <name>get_incidents</name>
         <operation_script><![CDATA[(function process(request) {
+	var searchParameter = request.queryParams.sysparm_search_value || '';
+	var records = [];
+	var dashboard = {};
+	
+	var gr = new GlideRecord('incident');
+	gr.orderBy('priority');
+	gr.addNullQuery('assigned_to');
+	if (searchParameter != '') {
+		gr.addQuery('short_description', 'CONTAINS', searchParameter);
+	}
+	gr.query();
+	
+	while (gr.next()) {
+		records.push({
+			sys_id: gr.getUniqueValue(),
+			number: gr.getValue('number'),
+			short_description: gr.getValue('short_description')
+		});
+		
+		if (!dashboard[gr.getDisplayValue('priority')]) {
+			dashboard[gr.getDisplayValue('priority')] = {
+				count: 1,
+				value: gr.getValue('priority')
+			};
+		} else {
+			dashboard[gr.getDisplayValue('priority')].count += 1;
+		}
+	}
+	
+	return {
+		records: records,
+		dashboard: dashboard,
+		total: gr.getRowCount()
+	};
 	
 })(request);]]></operation_script>
         <operation_uri>/api/sn_k16_im/incident_manager</operation_uri>
@@ -22,9 +56,9 @@
         <sys_class_name>sys_ws_operation</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-04-08 21:29:00</sys_created_on>
-        <sys_customer_update>false</sys_customer_update>
+        <sys_customer_update>true</sys_customer_update>
         <sys_id>bfb9f4e3c3221200a8625ad551d3aed4</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>get_incidents</sys_name>
         <sys_package display_value="K16 Incident Manager" source="sn_k16_im">ce99b4e3c3221200a8625ad551d3ae65</sys_package>
         <sys_policy/>
@@ -32,7 +66,7 @@
         <sys_scope display_value="K16 Incident Manager">ce99b4e3c3221200a8625ad551d3ae65</sys_scope>
         <sys_update_name>sys_ws_operation_bfb9f4e3c3221200a8625ad551d3aed4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2016-04-09 07:56:25</sys_updated_on>
+        <sys_updated_on>2016-05-18 23:26:49</sys_updated_on>
         <web_service_definition display_value="Incident Manager">7cb9f4e3c3221200a8625ad551d3ae12</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
