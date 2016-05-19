@@ -12,7 +12,7 @@ Contents:&#13;
 - Initialize the AngularJS application (using the ng-app attribute).&#13;
 - Initialize the AngularJS controller (using the ng-controller attribute).&#13;
 - Include the templates required for the application (using the ng-include attribute).  Each template is a UI Macro.</description>
-        <direct>true</direct>
+        <direct>false</direct>
         <endpoint>sn_k16_im_incident_manager.do</endpoint>
         <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
@@ -25,11 +25,13 @@ Contents:&#13;
 	
 	<div ng-app="k16.incident_manager.app">
 		<div ng-controller="IncidentManagerCtrl">
-			<nav class="navbar navbar-default">
-				<div class="col-md-12">
-					<h4>K16 Incident Manager</h4>
-				</div>
-			</nav>
+			<!-- The container and include for the navigation bar, which contains the header and search input 
+-->
+			<nav ng-include="getTemplate('sn_k16_im_navigation_bar')" class="navbar navbar-default"/>
+			
+			<!-- The list breadcrumb, containing text the current search term or 'All Incidents' if no search term exists 
+-->
+			<div ng-include="getTemplate('sn_k16_im_breadcrumbs')" class="row"/>		
 			
 			<!-- The Incident list, displaying specific Incident information and dashboard, display Incident counts 
 -->
@@ -50,7 +52,7 @@ Contents:&#13;
         <sys_created_on>2016-04-08 21:46:35</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>37cd7ce3c3221200a8625ad551d3ae84</sys_id>
-        <sys_mod_count>27</sys_mod_count>
+        <sys_mod_count>29</sys_mod_count>
         <sys_name>incident_manager</sys_name>
         <sys_package display_value="K16 Incident Manager" source="sn_k16_im">ce99b4e3c3221200a8625ad551d3ae65</sys_package>
         <sys_policy/>
@@ -58,6 +60,6 @@ Contents:&#13;
         <sys_scope display_value="K16 Incident Manager">ce99b4e3c3221200a8625ad551d3ae65</sys_scope>
         <sys_update_name>sys_ui_page_37cd7ce3c3221200a8625ad551d3ae84</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2016-05-19 00:08:08</sys_updated_on>
+        <sys_updated_on>2016-05-19 00:12:51</sys_updated_on>
     </sys_ui_page>
 </record_update>
